@@ -9,18 +9,19 @@
 #define DATA_PIN 5
 #define CLOCK_PIN 13
 #define ITERATE 1
+//step delay = milliseconds between every step
+#define STEP_DELAY 10
+// end delay = wait for how many milli seconds before fading back
+#define END_DELAY 1000
 
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 int fromcolor[] = {0, 0, 255};
 int tocolor[] = {255, 0, 0};
-int stepsize = 10;
-int enddelay = 1000;
 int currentcolor[] = {0,0,0};
 int maxdistance = 0;
 float factor[3]; 
 int coloriterator = 0;
-int multiplier = 1;
 int positionLED = 0;
 int halfdistance = NUM_LEDS/2 -1;
 int currentPosition = 0;
@@ -63,8 +64,6 @@ void setup() {
     maxdistance = abs(fromcolor[i] - tocolor[i]);
   }
  }
-
-
  //determine change factor for each color
   for (int i=0;i<3;i++) {
     factor[i] = maxdistance / abs(float(fromcolor[i])-float(tocolor[i]));
@@ -123,7 +122,7 @@ void loop() {
     //reset iterator
     coloriterator = 0;
     //wait for n amount of milliseconds before starting the next fade
-    delay(enddelay);
+    delay(END_DELAY);
   }
   else {
     //for each color
@@ -149,6 +148,6 @@ void loop() {
     //change the value of the "frontmost led" to its new value
     leds[positionLED] = CRGB(currentcolor[0],currentcolor[1],currentcolor[2]);
     FastLED.show();
-    delay(stepsize);
+    delay(STEP_DELAY);
   }
 }
